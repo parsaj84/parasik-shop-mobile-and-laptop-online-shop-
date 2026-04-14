@@ -1,0 +1,17 @@
+{%load static%}
+
+
+<!-- shopping cart -->
+
+<section class="flex flex-col items-center justify-center gap-y-3 mt-5">
+    <img class="max-w-60" src="{%static 'cart_images/empty-cart.svg'%}" alt="">
+    <h1 class="font-DanaDemiBold text-gray-700 dark:text-gray-300 text-2xl mt-2">
+        سبد خرید شما خالی است!
+    </h1>
+    <a class="flex items-center justify-center w-fit text-sky-500" href="{%url 'products:product_list'%}">
+        مشاهده فروشگاه
+        <svg class="size-4 mb-0.5">
+            <use href="#chevron-left" />
+        </svg>
+    </a>
+</section>

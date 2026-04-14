@@ -1,0 +1,87 @@
+{%load static jformat general_tags%}
+<!DOCTYPE html>
+<html lang="as">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>factor</title>
+    <style>
+        @font-face {
+            font-family: morabba;
+            src: url(./fonts/Dana/woff2/DanaFaNum-DemiBold.woff2);
+        }
+
+        * {
+            font: morabba;
+            direction: rtl;
+      
+        }
+        header {
+            margin-bottom: 15px;
+        }
+        header div{
+            display: flex;
+            justify-content: space-between;
+        }
+        main {
+            display: flex;
+            justify-content: center;
+        }
+        table {
+            width: 80%;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table th , table td {
+           border: 1px solid black;
+           text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>اطلاعات سفارش:</h1>
+        <div class="general-info">
+            
+            <div class="right">
+                <span>شماره : {{order.id}}</span>
+            </div>
+            <div class="left"><span>تاریخ : {{order.date_created|jformat:'%Y/%m/%d'}}</span></div>
+        </div>
+        <div class="buyer-info">
+            <div class="right">نام و نام خانودادگی :{{order.fname}} {{order.lname}}</div>
+            <div class="left">شماره تلفن خریدار:{{order.phone}}</div>
+        </div>
+    </header>
+    <main>
+      <table>
+            <thead>
+                <tr>
+                <th>محصول</th>
+                <th>تعداد</th>
+                <th>قیمت واحد</th>
+                <th>تخفیف</th>
+                <th>قیمت بعد از تخفیف</th> 
+                <th>قیمت نهایی</th>
+                </tr>
+            </thead>
+            <tbody>
+            {%for item in order.items.all%}
+            <tr>
+                <td>{{item.product.name}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.product.price|to_thousand_filter}}</td>
+                <td>{{item.product.off}}%</td>
+                <td>{{item.product.price_after_off|to_thousand_filter}}</td>
+                <td>{{item.get_total_price|to_thousand_filter}}</td>
+            </tr>
+            {%endfor%}
+            </tbody>
+        </table>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+{%if cities%}
+{%for city in cities%}
+<option value="{{city.0}}">{{city.1}}</option>
+{%endfor%}
+{%else%}
+<option value="">-----</option>
+{%endif%}

@@ -1,0 +1,635 @@
+{%extends 'base/base.html'%}
+
+{%block title%}
+home page
+{%endblock%}
+{%load static jformat general_tags product_tags%}
+{%block main%}
+<main class="relative">
+    <section class="mx-4 lg:container mt-20">
+        <!-- SECTION TITLE -->
+        <div class="flex flex-col gap-y-4 xs:flex-row items-center justify-between w-full text-center xs:text-start">
+            <div class="flex items-center gap-x-2 sm:gap-x-4">
+                <span class="size-12 hidden xs:flex rounded-lg bg-white shadow-lg dark:bg-gray-800 flex-center">
+                    <svg class="size-7 text-gray-700 dark:text-gray-100">
+                        <use href="#squares"></use>
+                    </svg>
+                </span>
+                <div class="space-y-1 md:space-y-1">
+                    <h3 class="text-xl md:text-2xl font-MorabbaMedium text-gray-800 dark:text-gray-50">دسـته بندی
+                        هـای
+                        <span class="text-blue-600 dark:text-blue-500">محبوب</span>
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">جدیدترین و بروزترین دسته بندی ها</p>
+                </div>
+            </div>
+            <div class="w-full xs:w-auto flex justify-center items-center gap-x-2">
+                <a href="{%url 'products:product_list'%}"
+                    class="group shadow-xl text-sm md:text-base flex gap-x-1.5 items-center px-2 h-10 md:px-3 text-white bg-blue-600 rounded-xl">
+                    <p>مشاهده همه</p>
+                    <span
+                        class="w-7 h-7 rounded-full bg-blue-500 flex-center md:group-hover:-translate-x-1 transition-transform duration-300">
+                        <svg class="size-5">
+                            <use href="#arrow" />
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <!-- ITEMS -->
+        <div
+            class="flex items-center justify-evenly flex-wrap mt-12 child:mb-8 gap-x-8 child:items-center child:flex-col child:duration-300 child:cursor-pointer child:gap-y-1 child:text-gray-800 child:dark:text-gray-300 child:relative">
+            {%for c in sub_cats%}
+            <a href="{%url 'products:product_by_category' c.slug%}" class="group flex">
+                <img src="{{c.avatar.url}}"
+                    class="w-[100px] h-[100px] lg:w-[120px] lg:h-[120px] object-cover group-hover:grayscale group-hover:opacity-90 duration-300"
+                    alt="category1" />
+                <p class="pt-1 text-sm lg:text-lg line-clamp-1">
+                    {{c.name}}
+                </p>
+            </a>
+            {%endfor%}
+
+        </div>
+    </section>
+    {%if exists%}
+    <section class="mx-4 lg:container mt-20">
+
+        <div class="w-full h-80 rounded-xl bg-blue-500 dark:bg-blue-700 p-4 relative">
+            <!-- AmazingSlider products Slider -->
+            <div class="swiper AmazingSlider w-full rounded-xl">
+                <button
+                    class="slider-navigate_btn absolute right-1 top-36 border dark:border-gray-700 border-gray-200 AmazingSlider-prev-slide z-10 swiper-button-disabled invisable-btn"
+                    tabindex="-1" aria-label="Previous slide" aria-controls="swiper-wrapper-9b0a9edd107f13136"
+                    aria-disabled="true" disabled="">
+                    <svg class="size-6 -rotate-90">
+                        <use href="#chevron"></use>
+                    </svg>
+                </button>
+                <button
+                    class="slider-navigate_btn absolute left-1 top-36 border dark:border-gray-700 border-gray-200 AmazingSlider-next-slide z-10"
+                    tabindex="0" aria-label="Next slide" aria-controls="swiper-wrapper-9b0a9edd107f13136"
+                    aria-disabled="false">
+                    <svg class="size-6 rotate-90">
+                        <use href="#chevron"></use>
+                    </svg>
+                </button>
+                <div class="swiper-wrapper">
+                    <!-- item -->
+                    <div class="swiper-slide amazing-card">
+                        <img class="w-28 h-28" src="{%static 'images/Amazings.svg'%}" alt="">
+                        <!-- TIMER -->
+                        <div class="flex items-center gap-x-2">
+                            <span class="timer-box" id="seconds">{{secounds}}</span>
+                            <p class="text-white">:</p>
+                            <span class="timer-box" id="minutes">{{minutes}}</span>
+                            <p class="text-white">:</p>
+                            <span class="timer-box" id="hours">{{hours}}</span>
+                        </div>
+
+                        <a href="{%url 'products:amazing_offer' offer.id%}" class="flex items-center gap-x-.5 text-gray-100 cursor-pointer">
+                            <p>مشاهده همه</p>
+                            <svg class="size-4 rotate-90">
+                                <use href="#chevron"></use>
+                            </svg>
+                        </a>
+                    </div>
+
+                    {%for p in products%}
+                    <div class="swiper-slide small-card group">
+                        <!-- product header -->
+                        <div class="w-full flex items-center justify-between">
+                           {%if p.today_delivery%}
+                            <span class="flex items-center gap-x-0.5 text-blue-400">
+                                <svg class="size-4 mb-1">
+                                    <use href="#rocket"></use>
+                                </svg>
+                                <p class="text-xs">ارسال امروز</p>
+                            </span>
+                            {%endif%}
+
+                        </div>
+
+                        <!-- product img -->
+                        <a href="{{p.get_absolute_url}}">
+                            <img class="small-card_img" src="{{p.files.first.image.url}}" alt="{{p.files.first.title}}">
+                        </a>
+                        <!--  product footer -->
+                        <div class="space-y-2">
+                            <a href="{{p.get_absolute_url}}" class="small-card_link">
+                                {{p.name}}
+                            </a>
+                            <!-- Rate and Price -->
+                            <div class="product-card_price-wrapper">
+                                <!-- Price -->
+                                 
+                                <div class="small-card_price justify-between">
+                                    {%if p.off%}<span class="pt-1"> {{p.off}}%</span>{%endif%}
+                                    <h4 class="flex items-center gap-x-1 text-lg">{{p.price_after_off|to_thousand_filter}}<p
+                                            class="text-xs font-DanaMedium">تومان</p>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {%endfor%}
+    </section>
+    {%endif%}
+    {%if most_selled_products%}
+            <section class="mx-4 lg:container mt-10 lg:mt-20">
+            <!-- SECTION TITLE -->
+            <div
+                class="flex flex-col gap-y-4 xs:flex-row items-center justify-between w-full text-center xs:text-start">
+                <div class="flex items-center gap-x-2 sm:gap-x-4">
+                    <span class="size-12 hidden xs:flex rounded-lg bg-white shadow-lg dark:bg-gray-800 flex-center">
+                        <svg class="size-7 text-gray-700 dark:text-gray-100">
+                            <use href="#mobile"></use>
+                        </svg>
+                    </span>
+                    <div class="space-y-1 md:space-y-1">
+                        <h3 class="text-xl md:text-2xl font-MorabbaMedium text-gray-800 dark:text-gray-50">محصولات
+                            <span class="text-blue-600 dark:text-blue-500">پرفروش </span>
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-300">جدیدترین و بروزترین محصولات</p>
+                    </div>
+                </div>
+                <div class="w-full xs:w-auto flex justify-between xs:justify-end  items-center gap-x-2">
+                    <div class="flex items-center gap-x-2">
+                        <button class="slider-navigate_btn BestSelling-prev-slide">
+                            <svg class="size-6 -rotate-90">
+                                <use href="#chevron" />
+                            </svg>
+                        </button>
+                        <button class="slider-navigate_btn BestSelling-next-slide">
+                            <svg class="size-6 rotate-90">
+                                <use href="#chevron" />
+                            </svg>
+                        </button>
+                    </div>
+                    <a href="{%url 'products:product_list'%}?order_by=sale"
+                        class="group shadow-xl text-sm md:text-base flex gap-x-1.5 items-center px-2 h-10 md:px-3 text-white bg-blue-600 rounded-xl">
+                        <p>مشاهده همه</p>
+                        <span
+                            class="w-7 h-7 rounded-full bg-blue-500 flex-center md:group-hover:-translate-x-1 transition-transform duration-300">
+                            <svg class="size-5">
+                                <use href="#arrow" />
+                            </svg>
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+            <!-- Latest products Slider -->
+        <div class="swiper products-index-container BestSelling mt-5 w-full">
+                <div class="swiper-wrapper py-5">
+                    <!-- PRODUCT ITEM -->
+            {%for p in most_selled_products%}
+                <div data-product-id="{{p.id}}" data-has-color-select="{%if p.has_colors%}true{%else%}false{%endif%}" class="swiper-slide product-card product-card-{{p.id}} group">
+                    <!-- product header -->
+                    <div class="product-card_header">
+                        <div class="flex items-center gap-x-2">
+                            {%if p.inventory%}
+                            <div class="tooltip">
+                                <button
+                                    class="{%if p|in_cart:cart%}text-blue-500{%endif%}  add-to-cart-btn add-to-cart-btn-{{p.id}} rounded-full p-1.5 app-border app-hover">
+                                    <svg class="size-4">
+                                        <use href="#shopping-cart"></use>
+
+                                    </svg>
+                                </button>
+                                <div class="tooltiptext">
+                                    سبد خرید
+                                </div>
+                            </div>
+                            {%endif%}
+                            <div class="tooltip">
+                                <button
+                                    class="favourite-btn {%if p in request.user.favourite_products.all%}text-blue-500{%endif%} rounded-full p-1.5 app-border app-hover">
+                                    <svg class="size-4">
+                                        <use href="#heart"></use>
+                                    </svg>
+                                </button>
+                                <div class="tooltiptext">
+                                    علاقه مندی
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- badge offer -->
+                        {%if p.off%}
+                        <span class="product-card_badge">{{p.off}}% تخفیف‌</س>
+                            {%endif%}
+                    </div>
+                    <!-- product img -->
+                    <a href="{{p.get_absolute_url}}">
+                        <img class="product-card_img group-hover:opacity-0 absolute" src="{{p.files.first.image.url}}"
+                            alt="{{p.files.first.title}}">
+                        {%with img=p.files.all|secound_in_query%}
+                        {%if img%}
+                        <img class="product-card_img opacity-0 group-hover:opacity-100" src="{{img.image.url}}"
+                            alt="{{img.title}}">
+                        {%else%}
+                        <div class="product-card_img opacity-0 group-hover:opacity-100">
+
+                        </div>
+                        {%endif%}
+                        {%endwith%}
+                    </a>
+                    <!--  product footer -->
+                    <div class="space-y-2">
+                        <a href="{{p.get_absolute_url}}" class="product-card_link">
+                            {{p.name}}
+                        </a>
+                        <!-- Rate and Price -->
+                        <div class="product-card_price-wrapper">
+                            <!-- RATE -->
+                            <div class="product-card_rate">
+                                <span class="flex items-center gap-x-0.5">
+                                    <svg class="size-4 text-blue-500 mb-0.5">
+                                        <use href="#rocket"></use>
+                                    </svg>
+                                    <p class="text-xs">ارسال امروز</p>
+                                </span>
+                                <span class="text-gray-400 flex items-center text-sm gap-x-0.5">
+                                    <p> 5.0 </p>
+                                    <svg class="size-4 mb-1">
+                                        <use href="#star"></use>
+                                    </svg>
+                                </span>
+                            </div>
+                            <!-- Price -->
+                            <div class="flex flex-col justify-center items-center">
+                                {%if p.inventory%}
+                                <div class="product-card_price">
+                                    {%if p.off%}
+                                    <del>{{p.price|to_thousand_filter}} <h6>تومان</h6></del>
+                                    <p>{{p.price_after_off|to_thousand_filter}}</p>
+                                    <span>تومان</span>
+                                    {%else%}
+                                    <!-- <del>{{p.price}} <h6>تومان</h6></del> -->
+                                    <p>{{p.price|to_thousand_filter}}</p>
+                                    <span>تومان</span>
+                                    {%endif%}
+                                </div>
+                                {%with p.colors.first as first_color_obj%}
+                                {%if p.has_colors%}
+                                <div data-color-maps="{{p.colors_map}}" class="flex flex-col  gap-y-4">
+                                    <!-- <h1 class="font-DanaDemiBold text-lg color-title dark:text-gray-200">رنگ : {{first_color_obj.name}}</h1> -->
+                                    <div class="product-colors flex items-center gap-x-3 child:rounded-full child:size-7 child:p-1">
+                                        {%for color in p.colors.all%}
+                                        {%check_if_current_color color cart.cart p as is_current_color%}
+                                        <button
+                                            data-active="{%if not p|in_cart:cart%}{%if color == first_color_obj%}true{%else%}false{%endif%}{%else%}{%if is_current_color%}true{%else%}false{%endif%}{%endif%}"
+                                            data-color-id="{{color.id}}"
+                                            class="color-select-btn transition-all duration-300 ease-in-out {%if not p|in_cart:cart%}{%if color == first_color_obj%}ring-4 ring-blue-400{%else%}ring-1 ring-gray-400{%endif%}{%else%}{%if is_current_color%} ring-4 ring-blue-400 {%else%} ring-1 ring-gray-400 {%endif%}{%endif%}">
+                                            <span class="{{color.style_class}} w-full h-full rounded-full flex"></span>
+                                        </button>
+                                        {%endfor%}
+                                    </div>
+                                </div>
+                                {%endif%}
+                                {%endwith%}
+
+                                {%else%}
+                                <div style="padding: 5px;  text-align: center;" class="product-card_price">
+
+
+                                    <p></p>
+                                    <p style="margin: 0px auto;padding: 5px; text-align: center;">ناموجود</p>
+
+                                </div>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    {%endfor%}
+
+                </div>
+            </div>
+        </section>
+    {%endif%}
+    {%if most_popular_products%}
+    <section class="mx-4 lg:container mt-10 lg:mt-20">
+            <!-- SECTION TITLE -->
+            <div class="flex flex-col gap-y-4 xs:flex-row items-center justify-between w-full text-center xs:text-start">
+                <div class="flex items-center gap-x-2 sm:gap-x-4">
+                    <span class="size-12 hidden xs:flex rounded-lg bg-white shadow-lg dark:bg-gray-800 flex-center">
+                        <svg class="size-7 text-gray-700 dark:text-gray-100">
+                            <use href="#mobile"></use>
+                        </svg>
+                    </span>
+                    <div class="space-y-1 md:space-y-1">
+                        <h3 class="text-xl md:text-2xl font-MorabbaMedium text-gray-800 dark:text-gray-50">جدید ترین
+                            <span class="text-blue-600 dark:text-blue-500">محصولات</span>
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-300">جدیدترین و بروزترین محصولات</p>
+                    </div>
+                </div>
+                <div class="w-full xs:w-auto flex justify-between xs:justify-end  items-center gap-x-2">
+                    <div class="flex items-center gap-x-2">
+                        <button class="slider-navigate_btn LatestProducts-prev-slide" tabindex="0" aria-label="Previous slide" aria-controls="swiper-wrapper-8d472732054a66da" aria-disabled="false">
+                            <svg class="size-6 -rotate-90">
+                                <use href="#chevron"></use>
+                            </svg>
+                        </button>
+                        <button class="slider-navigate_btn LatestProducts-next-slide" tabindex="0" aria-label="Next slide" aria-controls="swiper-wrapper-8d472732054a66da" aria-disabled="false">
+                            <svg class="size-6 rotate-90">
+                                <use href="#chevron"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <a href="{%url 'products:product_list'%}?order_by=latest_product" class="group shadow-xl text-sm md:text-base flex gap-x-1.5 items-center px-2 h-10 md:px-3 text-white bg-blue-600 rounded-xl">
+                        <p>مشاهده همه</p>
+                        <span class="w-7 h-7 rounded-full bg-blue-500 flex-center md:group-hover:-translate-x-1 transition-transform duration-300">
+                            <svg class="size-5">
+                                <use href="#arrow"></use>
+                            </svg>
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+            <!-- Latest products Slider -->
+            <div class="swiper products-index-container LatestProducts mt-5 w-full swiper-initialized swiper-horizontal swiper-rtl swiper-backface-hidden">
+                <div class="swiper-wrapper py-5" id="swiper-wrapper-8d472732054a66da" aria-live="off" style="transition-duration: 0ms; transform: translate3d(326.667px, 0px, 0px); transition-delay: 0ms;">
+                {%for p in most_popular_products%}
+                    <!-- PRODUCT ITEM -->
+                <div data-product-id="{{p.id}}" data-has-color-select="{%if p.has_colors%}true{%else%}false{%endif%}" class="swiper-slide product-card product-card-{{p.id}} group">
+                    <!-- product header -->
+                    <div class="product-card_header">
+                        <div class="flex items-center gap-x-2">
+                            {%if p.inventory%}
+                            <div class="tooltip">
+                                <button
+                                    class="{%if p|in_cart:cart%}text-blue-500{%endif%}  add-to-cart-btn add-to-cart-btn-{{p.id}} rounded-full p-1.5 app-border app-hover">
+                                    <svg class="size-4">
+                                        <use href="#shopping-cart"></use>
+
+                                    </svg>
+                                </button>
+                                <div class="tooltiptext">
+                                    سبد خرید
+                                </div>
+                            </div>
+                            {%endif%}
+                            <div class="tooltip">
+                                <button
+                                    class="favourite-btn {%if p in request.user.favourite_products.all%}text-blue-500{%endif%} rounded-full p-1.5 app-border app-hover">
+                                    <svg class="size-4">
+                                        <use href="#heart"></use>
+                                    </svg>
+                                </button>
+                                <div class="tooltiptext">
+                                    علاقه مندی
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- badge offer -->
+                        {%if p.off%}
+                        <span class="product-card_badge">{{p.off}}% تخفیف‌</س>
+                            {%endif%}
+                    </div>
+                    <!-- product img -->
+                    <a href="{{p.get_absolute_url}}">
+                        <img class="product-card_img group-hover:opacity-0 absolute" src="{{p.files.first.image.url}}"
+                            alt="{{p.files.first.title}}">
+                        {%with img=p.files.all|secound_in_query%}
+                        {%if img%}
+                        <img class="product-card_img opacity-0 group-hover:opacity-100" src="{{img.image.url}}"
+                            alt="{{img.title}}">
+                        {%else%}
+                        <div class="product-card_img opacity-0 group-hover:opacity-100">
+
+                        </div>
+                        {%endif%}
+                        {%endwith%}
+                    </a>
+                    <!--  product footer -->
+                    <div class="space-y-2">
+                        <a href="{{p.get_absolute_url}}" class="product-card_link">
+                            {{p.name}}
+                        </a>
+                        <!-- Rate and Price -->
+                        <div class="product-card_price-wrapper">
+                            <!-- RATE -->
+                            <div class="product-card_rate">
+                                <span class="flex items-center gap-x-0.5">
+                                    <svg class="size-4 text-blue-500 mb-0.5">
+                                        <use href="#rocket"></use>
+                                    </svg>
+                                    <p class="text-xs">ارسال امروز</p>
+                                </span>
+                                <span class="text-gray-400 flex items-center text-sm gap-x-0.5">
+                                    <p> 5.0 </p>
+                                    <svg class="size-4 mb-1">
+                                        <use href="#star"></use>
+                                    </svg>
+                                </span>
+                            </div>
+                            <!-- Price -->
+                            <div class="flex flex-col justify-center items-center">
+                                {%if p.inventory%}
+                                <div class="product-card_price">
+                                    {%if p.off%}
+                                    <del>{{p.price|to_thousand_filter}} <h6>تومان</h6></del>
+                                    <p>{{p.price_after_off|to_thousand_filter}}</p>
+                                    <span>تومان</span>
+                                    {%else%}
+                                    <!-- <del>{{p.price}} <h6>تومان</h6></del> -->
+                                    <p>{{p.price|to_thousand_filter}}</p>
+                                    <span>تومان</span>
+                                    {%endif%}
+                                </div>
+                                {%with p.colors.first as first_color_obj%}
+                                {%if p.has_colors%}
+                                <div data-color-maps="{{p.colors_map}}" class="flex flex-col  gap-y-4">
+                                    <!-- <h1 class="font-DanaDemiBold text-lg color-title dark:text-gray-200">رنگ : {{first_color_obj.name}}</h1> -->
+                                    <div class="product-colors flex items-center gap-x-3 child:rounded-full child:size-7 child:p-1">
+                                        {%for color in p.colors.all%}
+                                        {%check_if_current_color color cart.cart p as is_current_color%}
+                                        <button
+                                            data-active="{%if not p|in_cart:cart%}{%if color == first_color_obj%}true{%else%}false{%endif%}{%else%}{%if is_current_color%}true{%else%}false{%endif%}{%endif%}"
+                                            data-color-id="{{color.id}}"
+                                            class="color-select-btn transition-all duration-300 ease-in-out {%if not p|in_cart:cart%}{%if color == first_color_obj%}ring-4 ring-blue-400{%else%}ring-1 ring-gray-400{%endif%}{%else%}{%if is_current_color%} ring-4 ring-blue-400 {%else%} ring-1 ring-gray-400 {%endif%}{%endif%}">
+                                            <span class="{{color.style_class}} w-full h-full rounded-full flex"></span>
+                                        </button>
+                                        {%endfor%}
+                                    </div>
+                                </div>
+                                {%endif%}
+                                {%endwith%}
+
+                                {%else%}
+                                <div style="padding: 5px;  text-align: center;" class="product-card_price">
+
+
+                                    <p></p>
+                                    <p style="margin: 0px auto;padding: 5px; text-align: center;">ناموجود</p>
+
+                                </div>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {%endfor%}
+                </div>
+            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+    </section>
+    {%endif%}
+    {%if posts%}
+    <section class="mx-4 lg:container mt-10 lg:mt-20">
+            <!-- SECTION TITLE -->
+            <div
+                class="flex flex-col gap-y-4 xs:flex-row items-center justify-between w-full text-center xs:text-start">
+                <div class="flex items-center gap-x-2 sm:gap-x-4">
+                    <span class="size-12 hidden xs:flex rounded-lg bg-white shadow-lg dark:bg-gray-800 flex-center">
+                        <svg class="size-7 text-gray-700 dark:text-gray-100">
+                            <use href="#check-badge"></use>
+                        </svg>
+                    </span>
+                    <div class="space-y-1 md:space-y-1">
+                        <h3 class="text-xl md:text-2xl font-MorabbaMedium text-gray-800 dark:text-gray-50">محبوب‌ترین
+                            <span class="text-blue-600 dark:text-blue-500">مقالات</span>
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-300">جدیدترین و بروزترین مقالات</p>
+                    </div>
+                </div>
+                <div class="w-full xs:w-auto flex justify-between xs:justify-end  items-center gap-x-2">
+                    <div class="flex items-center gap-x-2">
+                        <button class="slider-navigate_btn articleSlider-prev-slide">
+                            <svg class="size-6 -rotate-90">
+                                <use href="#chevron" />
+                            </svg>
+                        </button>
+                        <button class="slider-navigate_btn articleSlider-next-slide">
+                            <svg class="size-6 rotate-90">
+                                <use href="#chevron" />
+                            </svg>
+                        </button>
+                    </div>
+                    <a href="{%url 'blog:post_list'%}"
+                        class="group shadow-xl text-sm md:text-base flex gap-x-1.5 items-center px-2 h-10 md:px-3 text-white bg-blue-600 rounded-xl">
+                        <p>مشاهده همه</p>
+                        <span
+                            class="w-7 h-7 rounded-full bg-blue-500 flex-center md:group-hover:-translate-x-1 transition-transform duration-300">
+                            <svg class="size-5">
+                                <use href="#arrow" />
+                            </svg>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="swiper articleSlider w-full mt-5">
+                <div class="swiper-wrapper w-full py-5">
+                    <!-- ITEM -->
+                     {%for post in posts%}
+                    <div class="swiper-slide group article-box">
+                        <div class="relative overflow-hidden rounded-lg">
+                            <img src="{{post.files.first.image.url}}" class="article-box_img" alt="{{post.files.first.title}}" />
+                            <div
+                                class="absolute opacity-0 left-0 top-0 bottom-0 right-0 bg-black/60 flex items-center justify-center group-hover:opacity-100 duration-300 transition-all rounded-bl-3xl rounded-tr-3xl">
+                                <a href="{{post.get_absolute_url}}"
+                                    class="flex items-center px-2 py-1 gap-x-1 font-DanaMedium rounded-lg border-2 border-white text-white">
+                                    <p>ادامه مطالب</p>
+                                    <svg class="w-4 h-4 rotate-90">
+                                        <use href="#chevron"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-y-1 py-5 px-1">
+                            <h2 class="font-DanaDemiBold">{{post.title}}</h2>
+                        </div>
+                        <span class="flex w-full h-1 py-1 border-t border-gray-100 dark:border-white/10"></span>
+                        <div class="flex items-center justify-between text-sm px-1">
+                            <span class="flex items-center gap-x-1 text-blue-500 dark:text-sky-400">
+                                <svg class="w-4 h-4">
+                                    <use href="#calendar"></use>
+                                </svg>
+                                <p class="mt-1">{{post.date_created|jformat:'%Y/%m/%d'}}</p>
+                            </span>
+                            <span class="flex items-start gap-x-1 text-gray-300">
+                                <p class="font-DanaDemiBold">{{post.user_viewed.count}}</p>
+                                <svg class="w-4 h-4">
+                                    <use href="#eye"></use>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </section>
+    {%endif%}
+        <div class="container w-full mt-10 lg:mt-20 flex flex-wrap items-center justify-between gap-6 child:text-sm child:gap-y-1 child:cursor-pointer">
+            <!-- item -->
+            <span class="flex-col items-center justify-center hidden md:flex">
+                <img class="w-14 h-14" src="{%static 'images/1.svg'%}" alt="">
+                <p class="text-gray-500 dark:text-gray-300">امکان تحویل اکسپرس</p>
+            </span>
+            <span class="flex flex-col items-center justify-center">
+                <img class="w-14 h-14" src="{%static 'images/2.svg'%}" alt="">
+                <p class="text-gray-500 dark:text-gray-300">ضمانت اصل بودن کالا</p>
+            </span>
+            <span class="flex flex-col items-center justify-center">
+                <img class="w-14 h-14" src="{%static 'images/3.svg'%}" alt="">
+                <p class="text-gray-500 dark:text-gray-300">ضمانت بازگشت کالا</p>
+            </span>
+            <span class="flex flex-col items-center justify-center">
+                <img class="w-14 h-14" src="{%static 'images/4.svg'%}" alt="">
+                <p class="text-gray-500 dark:text-gray-300">پشتیبانی 24 ساعته</p>
+            </span>
+            <span class="flex flex-col items-center justify-center">
+                <img class="w-14 h-14" src="{%static 'images/5.svg'%}" alt="">
+                <p class="text-gray-500 dark:text-gray-300">امکان پرداخت در محل</p>
+            </span>
+        </div>
+</main>
+
+{%endblock%}
+{%block header%}
+
+<div class="px-3 lg:container group w-full mt-4 lg:mt-10">
+    <div dir="rtl" class="swiper header-slider h-52 md:h-96 cursor-pointer">
+        <div class="swiper-wrapper">
+            {%for s in sliders%}
+            <a href="{%if s.link%}  {{s.link}} {%else%}{%url 'products:product_by_slider' s.id%}{%endif%}" class="swiper-slide">
+                <img src="{{s.image.url}}" class="rounded-xl" alt="{{s.name}}">
+            </a>
+            {%endfor%}
+
+
+
+        </div>
+        <div class="swiper-pagination-wrapper">
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Swiper Navigation -->
+        <div
+            class="absolute z-10 bottom-5 opacity-0 invisible group-hover:opacity-100 transition-all duration-300 group-hover:visible right-6 hidden lg:flex items-center gap-x-2 child:flex-center child:w-9 child:h-9 child:cursor-pointer child:bg-white child:dark:bg-gray-800 child:text-gray-700 child:dark:text-gray-200 child:rounded-full child:shadow child-hover:text-blue-600 child-hover:dark:text-blue-500">
+            <button class="button-prev">
+                <svg class="size-5 -rotate-90">
+                    <use href="#chevron" />
+                </svg>
+            </button>
+            <button class="button-next">
+                <svg class="size-5 rotate-90">
+                    <use href="#chevron" />
+                </svg>
+            </button>
+        </div>
+
+    </div>
+</div>
+<div id="index-data" data-url-add-to-favourite="{%url 'users:add_to_favourite'%}" data-url-add-to-cart = '{%url "cart:add_to_cart"%}' data-hours="{{hours}}" data-minutes="{{minutes}}" data-secounds="{{secounds}}"></div>
+{%endblock%}
+{%block scripts%}
+<script src="{%static 'js/swiper.js'%}"></script>
+<script type="module" src="{%static 'js/slider.js'%}"></script>
+<script src="{%static 'js/index.js'%}"></script>
+
+{%endblock%}

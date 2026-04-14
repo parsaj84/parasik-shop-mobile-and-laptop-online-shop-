@@ -1,0 +1,124 @@
+{%load jformat%}
+{%if posts%}
+<div class="grid grid-cols-1 xxs:grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 gap-6">
+    <!-- ITEM -->
+    {%for p in posts%}
+    <div class="group article-box">
+        <div class="relative overflow-hidden rounded-lg">
+            <img src="{{p.files.first.image.url}}" class="article-box_img" alt="{{p.files.first.title}}" />
+            <div
+                class="absolute opacity-0 left-0 top-0 bottom-0 right-0 bg-black/60 flex items-center justify-center group-hover:opacity-100 duration-300 transition-all rounded-bl-3xl rounded-tr-3xl">
+                <a href="{{p.get_absolute_url}}"
+                    class="flex items-center px-2 py-1 gap-x-1 font-DanaMedium rounded-lg border-2 border-white text-white">
+                    <p>ادامه مطالب</p>
+                    <svg class="w-4 h-4 rotate-90">
+                        <use href="#chevron"></use>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="flex flex-col gap-y-1 py-5 px-1">
+            <h2 class="font-DanaDemiBold">{{p.title}}</h2>
+        </div>
+        <span class="flex w-full h-1 py-1 border-t border-gray-100 dark:border-white/10"></span>
+        <div class="flex items-center justify-between text-sm px-1">
+            <span class="flex items-center gap-x-1 text-blue-500 dark:text-sky-400">
+                <svg class="w-4 h-4">
+                    <use href="#calendar"></use>
+                </svg>
+                <p class="mt-1">{{p.date_created|jformat:"%Y/%m/%d"}}</p>
+            </span>
+            <span class="flex items-start gap-x-1 text-gray-300">
+                            <p class="font-DanaDemiBold">{{p.views}}</p>
+                            <svg class="w-4 h-4">
+                                <use href="#eye"></use>
+                            </svg>
+                        </span>
+        </div>
+    </div>
+    {%endfor%}
+
+</div>
+<!-- PAGINATION -->
+<div class="mt-10 w-full flex items-center justify-center">
+    <ul
+        class="flex items-center gap-x-3 child:flex child:items-center child:justify-center child:w-8 child:h-8 child:cursor-pointer child:shadow child:rounded-lg child:transition-all child:duration-300">
+        {% if posts.has_previous %}
+        <li data-page="{{ posts.previous_page_number }}" class="posts-pagination-ajax bg-white dark:bg-gray-800 hover:bg-gray-800 dark:hover:bg-blue-500 hover:text-white">
+            <a>
+                <svg class="size-5 rotate-180">
+                    <use href="#chevron-left"></use>
+                </svg>
+            </a>
+        </li>
+
+        {% if posts.number > 3 %}
+        <li
+            data-page="1" class="posts-pagination-ajax {%if posts.number == 1%}text-white bg-blue-500 {%else%} bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white {%endif%}">
+            <a>
+                1
+            </a>
+        </li>
+
+        {% if posts.number > 4 %}
+        <li class=" bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+            <a href="#">
+                ...
+            </a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+
+        {% for num in posts.paginator.page_range %}
+        {% if posts.number == num %}
+        <li data-page="{{ num }}" class="posts-pagination-ajax text-white bg-blue-500">
+            <a >
+                {{ num }}
+            </a>
+        </li>
+        {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %} <li
+           data-page="{{ num }}" class="posts-pagination-ajax bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+            <a>
+                {{ num }}
+            </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+            {% if posts.number < posts.paginator.num_pages|add:'-3' %} <li
+                class="bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                <a href="#">
+                    ...
+                </a>
+                </li>
+                <li data-page="{{ posts.paginator.num_pages }}" class="posts-pagination-ajax bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                    <a>
+                        {{ posts.paginator.num_pages }}
+                    </a>
+                </li>
+
+                {% elif posts.number < posts.paginator.num_pages|add:'-2' %} <li
+                   data-page="{{ posts.paginator.num_pages }}" class="posts-pagination-ajax bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                    <a>
+                        {{ posts.paginator.num_pages }}
+                    </a>
+                    </li>
+                    {% endif %}
+                    <li data-page="{{ posts.next_page_number }}" class="posts-pagination-ajax bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                        <a>
+                            <svg class="size-5">
+                                <use href="#chevron-left"></use>
+                            </svg>
+                        </a>
+                    </li>
+
+                    {% endif %}
+    </ul>
+</div>
+{%else%}
+<h3>
+    مقاله ای یافت نشد!
+</h3>
+{%endif%}

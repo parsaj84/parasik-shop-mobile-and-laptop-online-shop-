@@ -1,0 +1,13 @@
+
+{%load rest_framework%}
+<h1>
+    {%if message%}
+    {{message}}
+    {%endif%}
+</h1>
+
+<form action="/API/post-update-html/{{post.pk}}/" method="POST"> 
+    {%csrf_token%}
+    {%render_form serializer%}
+    <input type="submit" value="">
+</form>

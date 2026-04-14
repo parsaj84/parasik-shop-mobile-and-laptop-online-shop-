@@ -1,0 +1,60 @@
+<div data-item-id="{{item.id}}" style="overflow: visible;"
+    class="w-full overflow-y-auto refrall-modal-dialog w-full lg:w-3/4 flex flex-col gap-y-4 child:rounded-lg child:bg-white child:dark:bg-gray-800 child:shadow child:p-4">
+    <div style="overflow: visible;" class="w-full overflow-y-auto flex flex-col">
+        <span class="flex items-center gap-x-2">
+            <div class="close-refrall-modal">
+                <svg class="size-5">
+                    <use href="#arrow-right"></use>
+                </svg>
+            </div>
+            <p class="font-DanaDemiBold text-lg">فرم درخواست مرجوعی</p>
+        </span>
+        <p class="text-gray-500 dark:text-gray-400 font-DanaMedium mt-4 mb-4 text-sm lg:text-base">
+            اطلاعات کالا
+        </p>
+        <div class=" flex flex-row justify-between items-center mb-4">
+            <div class="item-image mx-auto  w-full">
+                <img class="w-[75%]" src="{{item.product.files.first.image.url}}" alt="">
+            </div>
+            <div class="item-name w-full text-l text-center">
+                نام : {{item.product.name}}
+            </div>
+            <div class="item-quantity text-lg w-full text-center">
+                تعداد : {{item.quantity}}
+            </div>
+        </div>
+        <div class="flex flex-col lg:flex-row  ">
+            <form method="POST" class="refrall-item-form w-full grid grid-cols-12 gap-4">
+                <input type="text" name="resoen" placeholder="دلیل"
+                    class="block w-full py-1 px-3 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400   transition-all col-span-12 h-11
+                            text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400"
+                    maxlength="100" >
+                <span class="block error active reason w-full     transition-all col-span-12 text-red-500 appearance-none"></span>
+                <div style="overflow: auto; max-height: 150px;"  id="itemRefrallImageEntry"
+                    class="item-image-input-section scrollbar block w-full py-1.5 px-3 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400   transition-all col-span-12 h-full
+                            text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    <input name="item_img" type="file" accept="image/*" hidden name="item_image">
+                    <div class="text-center text-gray-400 my-3">
+                        تصویر محصول خود را وارد کنید.
+                    </div>
+                    <div class="text-center text-gray-400 my-3">
+                        اندازه عکس نباید بیش از دو مگ باشد
+                    </div>
+                    <div class="error-image-size hidden text-center text-red-400">اندازه عکس بیش از حد مجاز</div>
+                    <div class="error-no-image hidden text-center text-red-400">برای درخواست مرجوعی تصویر اجباری است</div>
+                    <div class="error-process hidden text-center text-red-400">خطایی در هنگام پردازش رخ داد!لطفا دوباره امتحان کنید.</div>
+                    <div class="w-[50%] mx-auto flex justify-between entered-item-image">
+
+                    </div>
+                </div>
+            <div class="block w-full py-1.5 px-1 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400   transition-all col-span-12 h-full
+                              border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                <button
+                    class="w-full  flex items-center gap-x-1 justify-center bg-blue-500 text-white hover:bg-blue-600 transition-all rounded-lg shadow py-2">
+                    ثبت درخواست
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

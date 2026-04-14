@@ -1,0 +1,249 @@
+{%extends 'base/base.html'%}
+{%block title%}
+ تغییر ادرس
+{%endblock%}
+{%load static%}
+{%block head%}
+<style>
+    main {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .main-container {
+        width: 85%;
+        display: flex;
+        justify-content: center;
+    }
+</style>
+{%endblock%}
+
+{%block main%}
+
+<main>
+    <div class="main-container flex flex-col shadow rounded-lg p-4 dark:bg-gray-800 bg-white mt-5 lg:mt-0">
+        <div class="flex items-center justify-between">
+            <h2 class="font-DanaMedium text-lg">اطلاعات ادرس</h2>
+        </div>
+        <form class="mt-5 grid grid-cols-12 gap-5 child:col-span-12 child:lg:col-span-6" method="POST">
+            {%csrf_token%}
+            <!-- ITEM -->
+            <div>
+                <label for="email" class="block text-sm font-DanaMedium text-gray-500 dark:text-gray-300">
+                    استان </label>
+                <div class="mt-3 relative">
+                    <select name="province" required type="text"  value="پارسا وصالی"
+                        class="province-select block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                     text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    {{province_options}}
+                    </select>
+                </div>
+            </div>
+            <!-- ITEM -->
+            <div>
+                <label for="email" class="block text-sm font-DanaMedium text-gray-500 dark:text-gray-300">
+                    شهر </label>
+                <div class="mt-3 relative">
+                    <select required name="city" type="text" placeholder="090000000 "
+                        class="block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                     text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                        <div class="city-options">
+                            {{city_options}}
+                        </div>
+
+                    </select>
+                    <button type="button" class="absolute left-3 top-3 z-10">
+                        <svg class="size-5 text-gray-500">
+                            <use href="#edit"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- ITEM -->
+            <div>
+                <label for="email" class="block text-sm font-DanaMedium text-gray-500 dark:text-gray-300">
+                    تحویل گیرنده
+                </label>
+                <div class="mt-3 relative">
+                    <input required name="reciever" type="text" value="{{address.reciever}}"
+                        class="block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                     text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    <button type="button" class="absolute left-3 top-3 z-10">
+
+                    </button>
+                </div>
+            </div>
+            <!-- ITEM -->
+            <div>
+                <label for="email" class="block text-sm font-DanaMedium text-gray-500 dark:text-gray-300">
+                    شماره موبایل </label>
+                <div class="mt-3 relative">
+                    <input maxlength="11" required name="phone" type="text" value="{{address.phone}}"
+                        class="block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                     text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    <button type="button" class="absolute left-3 top-3 z-10">
+                        <svg class="size-5 text-gray-500">
+                            <use href="#edit"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- ITEM -->
+            <div>
+                <label for="email" class="block text-sm font-DanaMedium text-gray-500 dark:text-gray-300">
+                    ادرس </label>
+                <div class="mt-3 relative">
+                    <input required name="address" type="text" value="{{address.address}}"
+                        class="block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                     text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    <button type="button" class="absolute left-3 top-3 z-10">
+                        <svg class="size-5 text-gray-500">
+                            <use href="#edit"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label for="email" class="block text-sm font-DanaMedium text-gray-500 dark:text-gray-300">
+                    کد پستی </label>
+                <div class="mt-3 relative">
+                    <input maxlength="10" required name="postal_code" type="text" value="{{address.postal_code}}"
+                        class="block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                     text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    <button type="button" class="absolute left-3 top-3 z-10">
+                        <svg class="size-5 text-gray-500">
+                            <use href="#edit"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label for="email" class="block text-sm font-DanaMedium text-gray-500 dark:text-gray-300">
+                    نام ادرس</label>
+                <div class="mt-3 relative">
+                    <input maxlength="10"   name="address_name" type="text" value="{{address.name}}"
+                        class="block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                     text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    <button type="button" class="absolute left-3 top-3 z-10">
+                        <svg class="size-5 text-gray-500">
+                            <use href="#edit"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div>
+
+                <div style="margin-top: 32px;"  class="mt-3 relative">
+                    <input type="submit" style="width: 100%; " value="ثبت"
+                        class="block w-full p-2.5 text-base outline dark:outline-none outline-1 -outline-offset-1 placeholder:text-gray-400 transition-all
+                  text-gray-800 dark:text-gray-100 dark:bg-gray-900 bg-blue-100 border border-transparent hover:border-slate-200 appearance-none rounded-md outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-400">
+                    <button type="button" class="absolute left-3 top-3 z-10">
+
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+
+{%endblock%}
+
+{%block scripts%}
+{%if phone_error%}
+<script>
+    const isDarkMode = document.querySelector("html").classList.contains("dark")
+
+    const alertOptions = {
+        background: isDarkMode ? 'oklch(0.21 0.034 264.665)' : '#fff',
+        color: isDarkMode ? 'oklch(0.985 0.002 247.839)' : 'oklch(0.13 0.028 261.692)',
+        confirmButtonColor: isDarkMode ? 'oklch(0.488 0.243 264.376)' : 'oklch(0.623 0.214 259.815)',
+        cancelButtonColor: isDarkMode ? '#f44336' : '#d33',
+    };
+    Swal.fire({
+        title: "",
+        text: "لطفا اطلاعات را صحیح وارد کنید!",
+        icon: 'error',
+        confirmButtonText: 'باشه',
+        showCancelButton: false,
+        cancelButtonText: 'لغو',
+        background: alertOptions.background,
+        color: alertOptions.color,
+        confirmButtonColor: alertOptions.confirmButtonColor,
+        cancelButtonColor: alertOptions.cancelButtonColor
+    });
+</script>
+{%endif%}
+{%if postal_code_error%}
+
+<script>
+    const isDarkMode = document.querySelector("html").classList.contains("dark")
+
+    const alertOptions = {
+        background: isDarkMode ? 'oklch(0.21 0.034 264.665)' : '#fff',
+        color: isDarkMode ? 'oklch(0.985 0.002 247.839)' : 'oklch(0.13 0.028 261.692)',
+        confirmButtonColor: isDarkMode ? 'oklch(0.488 0.243 264.376)' : 'oklch(0.623 0.214 259.815)',
+        cancelButtonColor: isDarkMode ? '#f44336' : '#d33',
+    };
+    Swal.fire({
+        title: "",
+        text: "لطفا اطلاعات را صحیح وارد کنید!",
+        icon: 'error',
+        confirmButtonText: 'باشه',
+        showCancelButton: false,
+        cancelButtonText: 'لغو',
+        background: alertOptions.background,
+        color: alertOptions.color,
+        confirmButtonColor: alertOptions.confirmButtonColor,
+        cancelButtonColor: alertOptions.cancelButtonColor
+    });
+</script>
+{%endif%}
+
+{%if error%}
+
+<script>
+    const isDarkMode = document.querySelector("html").classList.contains("dark")
+
+    const alertOptions = {
+        background: isDarkMode ? 'oklch(0.21 0.034 264.665)' : '#fff',
+        color: isDarkMode ? 'oklch(0.985 0.002 247.839)' : 'oklch(0.13 0.028 261.692)',
+        confirmButtonColor: isDarkMode ? 'oklch(0.488 0.243 264.376)' : 'oklch(0.623 0.214 259.815)',
+        cancelButtonColor: isDarkMode ? '#f44336' : '#d33',
+    };
+    Swal.fire({
+        title: "",
+        text: "لطفا اطلاعات را صحیح وارد کنید!",
+        icon: 'error',
+        confirmButtonText: 'باشه',
+        showCancelButton: false,
+        cancelButtonText: 'لغو',
+        background: alertOptions.background,
+        color: alertOptions.color,
+        confirmButtonColor: alertOptions.confirmButtonColor,
+        cancelButtonColor: alertOptions.cancelButtonColor
+    });
+</script>
+{%endif%}
+
+
+<script>
+    $(document).ready(function () {
+        $(".province-select").change(function () {
+            let optionVlue = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: "{%url 'users:city_ajax_set'%}",
+                data: { "csrfmiddlewaretoken": "{{csrf_token}}", "province": optionVlue },
+                dataType: "html",
+                success: function (data) {
+                    $(".city-options").html(data)
+                }
+            });
+
+
+        });
+    });
+</script>
+{%endblock%}

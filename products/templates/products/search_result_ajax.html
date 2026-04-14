@@ -1,0 +1,32 @@
+{%if result%}
+<ul id="result-may-deleted"
+    class="pt-4 text-gray-500 dark:text-gray-300 flex flex-col gap-y-4 child:flex-between child:cursor-pointer">
+    <span class=" flex items-center text-sm gap-x-1 text-gray-600 dark:text-gray-200">
+        <p>نتیجه جستجو : <span claSS="client-search" class="font-DanaMedium text-blue-400"></span></p>
+    </span>
+    {%for r in result%}
+    <li>
+        <a href="{{r.get_absolute_url}}" class="flex items-center gap-x-2">
+            <svg class="size-5">
+                <use href="#search" />
+            </svg>
+            {{r.name|truncatewords:3}}
+        </a>
+        <div class="size-4">
+            <img src="{{r.files.first.image.url}}" style="width: 200px; height: auto; border-radius: 50%;"
+                alt="{{r.files.first.title}}">
+        </div>
+    </li>
+    {%endfor%}
+
+</ul>
+{%else%}
+<span class=" flex items-center text-sm gap-x-1 text-gray-600 dark:text-gray-200">
+    <p>نتیجه جستجو : <span claSS="client-search" class="font-DanaMedium text-blue-400"></span></p>
+</span>
+<h4>
+    نتیجه ای برای جستجوی شما یافت نشد
+</h4>
+
+
+{%endif%}
