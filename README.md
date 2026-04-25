@@ -15,6 +15,7 @@ The project focuses on simplicity, clean structure, high performance, and easy c
 - Responsive and modern UI  
 - Fully extendable backend structure  
 
+
 ---
 
 ## 🛠️ Technologies Used
@@ -27,6 +28,6 @@ The project focuses on simplicity, clean structure, high performance, and easy c
 - **tailwind css**
 
 ##  Future Improvements
-    -developing mobile app with react native and django rest framework
+- **developing mobile app with react native and django rest framework**
 
 ---
