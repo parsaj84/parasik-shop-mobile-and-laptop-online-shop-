@@ -26,7 +26,6 @@ urlpatterns = [
     path("post-update-api/<int:pk>/", views.PostUpdateView.as_view()),
     path("post-update-html/<int:pk>/", view=views.TestHTMLRender.as_view()),
     path("test/", view=views.test),
-    path("test-swagger/", view=views.SpectacularExampleAPIView.as_view(), name="spectacular test"),
     path("test-generic/<int:moz>/", view=views.ProductRetriveAPIView.as_view()),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:

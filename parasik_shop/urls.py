@@ -1,5 +1,5 @@
 """
-URL configuration for karin_shop project.
+URL configuration for parasik_shop project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('parasik-shop-administration/', admin.site.urls),
     path("", include("products.urls", namespace="products")),
     path("cart/", include("cart.urls", namespace="cart")),
     path("users/", include("users.urls", namespace="users") ),
