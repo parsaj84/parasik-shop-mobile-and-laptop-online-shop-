@@ -31,7 +31,7 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework import renderers
 from rest_framework import generics
 from rest_framework import filters
-from rest_framework.pagination import CursorPagination
+from rest_framework.pagination import CursorPagination,PageNumberPagination
 
 
 from drf_spectacular.utils import extend_schema
@@ -43,11 +43,7 @@ class CostumAnonThrotlle(AnonRateThrottle):
     rate = "100/day"
 
 
-# class MozPaginationClass(PageNumberPagination):
-#     page_size = 1
-#     page_query_param = "p"
-#     page_size_query_param = "moz"
-#     max_page_size = 3
+
 
 class CustomCursorPagination(CursorPagination):
     ordering = "-date_created"
@@ -300,10 +296,4 @@ class ProductRetriveAPIView(generics.RetrieveAPIView):
     permission_classes = [AnotherCostumPerm]
 
 
-class SpectacularExampleAPIView(views.APIView):
-    permission_classes = [AllowAny]
 
-    @extend_schema(parameters=[OpenApiParameter(name="moz", description="پارامتر برای فهم موز بودن یا نبودن!", type=OpenApiTypes.STR, location="query", )], responses={200: inline_serializer(name="moz", fields={"moz": serializers.CharField(), "serialize_moz": ProductSerializer()}), 403: OpenApiResponse(description="moz bazi dar avordi calack", response=inline_serializer(name="moz", fields={"moz_field": serializers.CharField()}))}, tags=["Moz"])
-    def get(self, request):
-        print(request.META.get("HTTP_ADDRESS", "no address"))
-        return Response({"moz": "moz"})
