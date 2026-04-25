@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+from django.template.loader import render_to_string
 
 from .models import Slider, Product, Color, Category, Comment, ProductFileManager, Feature, AmazingOfferMain
 
@@ -13,14 +15,17 @@ class CategorySimpleListFilter(admin.SimpleListFilter):
         ]
 
     def queryset(self, request, queryset):
-        return queryset.filter(category__id__in=[self.value()])
-
+        return queryset.filter(category__id__in=[self.value()]) if self.value() else queryset
 
 
 class FileInProduct(admin.TabularInline):
     model = ProductFileManager
-    fields = ["title", "image"]
+    fields = ["title", "image", "upload_file_btn"]
     extra = 1
+    readonly_fields = ["upload_file_btn"]
+
+    def upload_file_btn(self, obj):
+        return mark_safe(render_to_string("products/admin/upload_btn.html", {"obj": obj}))
 
 
 class CommentInLine(admin.TabularInline):
@@ -45,11 +50,30 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "price",
                     "off", "price_after_off", "inventory"]
     search_fields = ["name"]
-    readonly_fields = ["price_after_off"]
-    list_filter = [CategorySimpleListFilter, "price", "off", "price_after_off", "inventory"]
+    readonly_fields = ["price_after_off", "product_script"]
+    list_filter = [CategorySimpleListFilter, "price",
+                   "off", "price_after_off", "inventory"]
     filter_horizontal = ["category"]
     inlines = [FileInProduct, CommentInLine, FeaturInLine]
     ordering = ["-date_created"]
+
+    def product_script(self, obj):
+        return mark_safe("""
+    <script src="/static/js/jquery.min.js"></script>
+<script>
+    timeout= null
+    $(".upload-file-btn").on("click", function(e) {
+        e.preventDefault()
+        let fileId = $(this).data("file-id")
+        let progressBar = $(".progress-bar" + fileId).find(".bar")
+        console.log(fileId , progressBar ,progressBar[0].style.width + 10 )
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+            progressBar.css("width", progressBar[0].style.width + 10)
+        }, 100)
+    });
+</script>
+""")
 
 
 class CategoryAdmin(admin.ModelAdmin):

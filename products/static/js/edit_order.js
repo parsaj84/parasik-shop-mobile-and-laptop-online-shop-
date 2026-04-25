@@ -102,6 +102,7 @@ $(document).ready(function () {
                 data: form,
                 processData: false,
                 contentType: false,
+                
                 success: function (data) {
                     if (data.success) {
                         if (!data.can_refrall) {

@@ -49,9 +49,14 @@ INSTALLED_APPS = [
     "article",
     "apis",
 
+    "corsheaders",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
+
+
     "rest_framework",
     "rest_framework.authtoken"
-    
+
 
 ]
 
@@ -73,6 +78,7 @@ LOCALE_PATHS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,6 +92,11 @@ MIDDLEWARE = [
 ]
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'karin_shop.urls'
 
@@ -100,7 +111,7 @@ TEMPLATES = [
                 "cart.context_proccessors.cart_product_ids",
                 "products.context_processors.sub_cats",
                 "products.context_processors.saved_cat_id",
-                "users.context_processors.cities_list", 
+                "users.context_processors.cities_list",
                 "products.context_processors.category",
                 "users.context_processors.error_in_sms_send",
                 'django.template.context_processors.request',
@@ -195,19 +206,27 @@ EMAIL_PORT = 587
 EMIAL_BACKEND = "django.core.mail.backends.smtp.EmailBakend"
 
 
-
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES" : [
+    "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
         # "rest_framework.permissions.IsAuthenticated"
     ],
-    "DEFAULT_AUTHENTICATION_CLASSES" :
-[
-    'rest_framework.authentication.SessionAuthentication',
-    'rest_framework.authentication.BasicAuthentication'
-]
-    ,
-    "DEFAULT_PAGINATION_CLASS" : "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE" : 10
+    "DEFAULT_AUTHENTICATION_CLASSES":
+    [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': "SIDECAR",
+    'REDOC_DIST': 'SIDECAR',
+}

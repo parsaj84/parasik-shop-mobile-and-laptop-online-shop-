@@ -1,0 +1,647 @@
+openapi: 3.0.3
+info:
+  title: Your Project API
+  version: 1.0.0
+  description: Your project description
+paths:
+  /API/categories/:
+    get:
+      operationId: categories_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: یک شماره صفحه‌ در مجموعه نتایج صفحه‌بندی شده.
+        schema:
+          type: integer
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+    post:
+      operationId: categories_create
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /API/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: یک مقداد عدد یکتا که این دسته بندی را شناسایی میکند.
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: categories_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: یک مقداد عدد یکتا که این دسته بندی را شناسایی میکند.
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: categories_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: یک مقداد عدد یکتا که این دسته بندی را شناسایی میکند.
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: categories_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: یک مقداد عدد یکتا که این دسته بندی را شناسایی میکند.
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /API/fbv-post-api/:
+    get:
+      operationId: fbv_post_api_retrieve
+      tags:
+      - fbv-post-api
+      security:
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: fbv_post_api_create
+      tags:
+      - fbv-post-api
+      security:
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /API/orders/:
+    get:
+      operationId: orders_retrieve
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /API/orders/{id}:
+    get:
+      operationId: orders_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          description: No response body
+  /API/post-delete/{id}/:
+    delete:
+      operationId: post_delete_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - post-delete
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /API/post-list-api/:
+    get:
+      operationId: post_list_api_retrieve
+      tags:
+      - post-list-api
+      security:
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: post_list_api_create
+      tags:
+      - post-list-api
+      security:
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: post_list_api_destroy
+      tags:
+      - post-list-api
+      security:
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /API/post-update-api/{id}/:
+    put:
+      operationId: post_update_api_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - post-update-api
+      security:
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /API/post-update-html/{id}/:
+    get:
+      operationId: post_update_html_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - post-update-html
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: post_update_html_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - post-update-html
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /API/product-detail/{id}/:
+    get:
+      operationId: product_detail_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - product-detail
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /API/product-list/:
+    get:
+      operationId: product_list_list
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: مقدار نشانگر صفحه‌بندی.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: کدام فیلد باید هنگام مرتب‌سازی نتایج استفاده شود.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: یک عبارت جستجو.
+        schema:
+          type: string
+      tags:
+      - product-list
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+  /API/test/:
+    get:
+      operationId: test_retrieve
+      tags:
+      - test
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /API/test-generic/{moz}/:
+    get:
+      operationId: test_generic_retrieve
+      parameters:
+      - in: path
+        name: moz
+        schema:
+          type: integer
+        required: true
+      tags:
+      - test-generic
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /API/user-register/:
+    post:
+      operationId: user_register_create
+      tags:
+      - user-register
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /API/users/:
+    get:
+      operationId: users_retrieve
+      tags:
+      - users
+      security:
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        slug:
+          type: string
+          title: اسلاگ
+          pattern: ^[-\w]+$
+          maxLength: 50
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+          readOnly: true
+      required:
+      - products
+      - slug
+    File:
+      type: object
+      properties:
+        image:
+          type: string
+          format: uri
+          title: تصویر
+        title:
+          type: string
+          title: عنوان
+          maxLength: 50
+      required:
+      - image
+      - title
+    Item:
+      type: object
+      properties:
+        price:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: قیمت
+        weight:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: وزن
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: تعداد
+        product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+      required:
+      - price
+      - product
+      - quantity
+      - weight
+    Order:
+      type: object
+      properties:
+        fname:
+          type: string
+          title: نام
+          maxLength: 20
+        lname:
+          type: string
+          title: نام خانوادگی
+          maxLength: 20
+        phone:
+          type: string
+          title: شماره تلفن
+          pattern: ^(\+98|0)?9\d{9}$
+          maxLength: 11
+        postal_code:
+          type: string
+          title: کد پستی
+          pattern: ^\d{10}$
+          maxLength: 10
+        des:
+          type: string
+          nullable: true
+          title: توضیحات
+          maxLength: 100
+        date_created:
+          type: string
+          format: date-time
+          readOnly: true
+          title: تاریخ سفارش
+        date_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          title: اخرین بروزرسانی
+        is_rejected:
+          type: boolean
+          title: مرجوعی
+        is_paid:
+          type: boolean
+          title: پرداخت شده
+        post_type:
+          allOf:
+          - $ref: '#/components/schemas/PostTypeEnum'
+          title: نوع پست
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          readOnly: true
+      required:
+      - date_created
+      - date_updated
+      - fname
+      - items
+      - lname
+      - phone
+      - postal_code
+    PaginatedCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PaginatedProductList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    PatchedCategory:
+      type: object
+      properties:
+        slug:
+          type: string
+          title: اسلاگ
+          pattern: ^[-\w]+$
+          maxLength: 50
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+          readOnly: true
+    PostTypeEnum:
+      enum:
+      - PSH
+      - MN
+      type: string
+      description: |-
+        * `PSH` - پیشتاز
+        * `MN` - معمولی
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          title: نام
+          maxLength: 30
+        price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: قیمت
+        price_after_off:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          title: قیمت پس از تخفیف
+        'off':
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: تخفیف
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+          readOnly: true
+      required:
+      - files
+      - name
+      - 'off'
+      - price
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

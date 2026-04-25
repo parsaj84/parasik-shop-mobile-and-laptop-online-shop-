@@ -1,3 +1,6 @@
+from drf_spectacular.utils import inline_serializer, OpenApiResponse, OpenApiRequest, OpenApiParameter
+from rest_framework import serializers
+from drf_spectacular.types import OpenApiTypes
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
@@ -9,8 +12,7 @@ from orders.models import Order
 from article.models import *
 
 
-from .seializers import ProductSerializer, UserSerializer, PostHLModelSerilizer,CategorySerializer, OrderSerializer, PostSerializer
-
+from .seializers import ProductSerializer, UserSerializer, PostHLModelSerilizer, CategorySerializer, OrderSerializer, PostSerializer
 
 
 from rest_framework.settings import api_settings
@@ -29,29 +31,35 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework import renderers
 from rest_framework import generics
 from rest_framework import filters
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import CursorPagination
 
+
+from drf_spectacular.utils import extend_schema
 
 from .permissions import CostumPerm, AnotherCostumPerm
-
-
 
 
 class CostumAnonThrotlle(AnonRateThrottle):
     rate = "100/day"
 
 
-class MozPaginationClass(PageNumberPagination):
-    page_size = 1
-    page_query_param = "p"
-    page_size_query_param = "moz"
-    max_page_size = 3
+# class MozPaginationClass(PageNumberPagination):
+#     page_size = 1
+#     page_query_param = "p"
+#     page_size_query_param = "moz"
+#     max_page_size = 3
+
+class CustomCursorPagination(CursorPagination):
+    ordering = "-date_created"
+    page_size = 5
+
 
 class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    pagination_class = MozPaginationClass
+    pagination_class = CustomCursorPagination
+
 
 class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
@@ -63,23 +71,18 @@ class ProductDetailView(generics.RetrieveAPIView):
         return obj
 
 
-
 class UserListAPIView(views.APIView):
     permission_classes = [AllowAny]
     authentication_classes = [BasicAuthentication]
-    
-    
 
     def get(self, request, *args, **kwargs):
         users = CostumUser.objects.all()
         serializer = UserSerializer(users, many=True)
-        
-        if page:= request.query_params.get("page"):
+
+        if page := request.query_params.get("page"):
             paginator = PageNumberPagination()
             paginator.paginate_queryset()
-            
-            
-            
+
         return Response(serializer.data)
 
 
@@ -104,16 +107,16 @@ class UserRegisterAPiView(views.APIView):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    
 
+
+@extend_schema(request=OrderSerializer, responses=OrderSerializer)
 class OrderView(views.APIView):
     permission_classes = [AllowAny]
-    
 
     def get(self, request, *args, **kwargs):
         orders = Order.objects.all()
         serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data, content_type="application/*")
+        return Response(serializer.data)
 
 
 class OrderDetailApiView(views.APIView):
@@ -138,7 +141,6 @@ class PostApi(views.APIView):
     permission_classes = [AllowAny]
     authentication_classes = [BasicAuthentication]
     throttle_classes = [CostumAnonThrotlle]
-    
 
     def get(self, request, *args, **kwargs):
         posts = Post.acp_manage.select_related(
@@ -196,27 +198,30 @@ class PostUpdateView(views.APIView):
     def put(self, request, pk):
         data = request.data
         try:
-            post = Post.objects.get(pk = pk)
+            post = Post.objects.get(pk=pk)
             for category in data.get("categories"):
                 try:
-                    category = Category.objects.get(slug= data.get("slug"))
-                    for key ,value in category.items():
+                    category = Category.objects.get(slug=data.get("slug"))
+                    for key, value in category.items():
                         setattr(category, key, value)
                         category.save()
                 except Category.DoesNotExist:
-                        category = Category.objects.create(**category)
-                        post.categories.add(category)
+                    category = Category.objects.create(**category)
+                    post.categories.add(category)
             for paragraph_dict in data.get("paragraphs"):
                 try:
-                    paragraph = Paragraph.objects.get(pk=paragraph_dict.get("pk"))
+                    paragraph = Paragraph.objects.get(
+                        pk=paragraph_dict.get("pk"))
                     for key, value in paragraph_dict:
                         if key != "image":
-                           setattr(paragraph , key, value)
+                            setattr(paragraph, key, value)
                         paragraph.save()
                 except Paragraph.DoesNotExist:
-                    paragraph = Paragraph.objects.create(post = post, **paragraph_dict)
+                    paragraph = Paragraph.objects.create(
+                        post=post, **paragraph_dict)
             try:
-                author = CostumUser.objects.get(phone = data.get("author").get("phone"))
+                author = CostumUser.objects.get(
+                    phone=data.get("author").get("phone"))
             except CostumUser.DoesNotExist:
                 return Response("<html></html>")
 
@@ -225,7 +230,7 @@ class PostUpdateView(views.APIView):
             data.pop("paragraphs")
             data.pop("categories")
             data.pop("id")
-            for key , value in data.items():
+            for key, value in data.items():
                 setattr(post, key, value)
             post.save()
             serialzer = PostSerializer(post)
@@ -251,11 +256,6 @@ def post_list_api(request):
     return Response(serializer.data)
 
 
-
-
-
-
-
 class TestHTMLRender(views.APIView):
     renderer_classes = [renderers.TemplateHTMLRenderer]
     template_name = "api/test.html"
@@ -267,8 +267,8 @@ class TestHTMLRender(views.APIView):
         except Post.DoesNotExist:
             return HttpResponse("404")
         serialzer = PostSerializer(post)
-        return Response({"serializer" : serialzer, "post" : post})
-    
+        return Response({"serializer": serialzer, "post": post})
+
     def post(self, request, pk):
         try:
             post = Post.objects.get(pk=pk)
@@ -281,15 +281,16 @@ class TestHTMLRender(views.APIView):
         else:
             post = None
             message = "data is not valid"
-        return Response({"serializer" : serializer, "post" : post, "message" : message})
-    
+        return Response({"serializer": serializer, "post": post, "message": message})
+
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def test(request):
     request.body.decode("utf-8")
     print(request.data)
-    return Response({"moz" : "moz"})
+    return Response({"moz": "moz"})
+
 
 class ProductRetriveAPIView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
@@ -298,3 +299,11 @@ class ProductRetriveAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     permission_classes = [AnotherCostumPerm]
 
+
+class SpectacularExampleAPIView(views.APIView):
+    permission_classes = [AllowAny]
+
+    @extend_schema(parameters=[OpenApiParameter(name="moz", description="پارامتر برای فهم موز بودن یا نبودن!", type=OpenApiTypes.STR, location="query", )], responses={200: inline_serializer(name="moz", fields={"moz": serializers.CharField(), "serialize_moz": ProductSerializer()}), 403: OpenApiResponse(description="moz bazi dar avordi calack", response=inline_serializer(name="moz", fields={"moz_field": serializers.CharField()}))}, tags=["Moz"])
+    def get(self, request):
+        print(request.META.get("HTTP_ADDRESS", "no address"))
+        return Response({"moz": "moz"})

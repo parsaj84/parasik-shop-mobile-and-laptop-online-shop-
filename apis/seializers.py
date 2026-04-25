@@ -27,7 +27,7 @@ class DynamicFieldsSerializer(serializers.ModelSerializer):
             for field in existing_fileds - allowed_fields:
                 self.fields.pop(field)
     
-
+    
 
 class ProductSerializer(DynamicFieldsSerializer):
 
@@ -61,7 +61,7 @@ class CategorySerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True, read_only=True)
     class Meta:
         model = Category
-        fields = ["name", "slug", "products"]
+        fields = [ "slug", "products"]
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -155,10 +155,11 @@ class ParagraphCreateSerializer(serializers.ModelSerializer):
 
 class PostCreateSerializer(serializers.ModelSerializer):
     paragraphs = ParagraphSerilaizer(many=True)
+    
     class Meta:
         model = Post
         fields = ["title", "text", "paragraphs"]
-
+        
     def create(self, validated_data):
         post = Post.objects.create(title=validated_data.get(
             "title"), text=validated_data.get("text"))
