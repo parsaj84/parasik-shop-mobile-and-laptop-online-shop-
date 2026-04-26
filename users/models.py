@@ -143,9 +143,9 @@ class CostumUser(AbstractBaseUser, PermissionsMixin):
     verbose_name="کد ملی", blank=True, null=True, max_length = 10, validators=[validators.RegexValidator(regex= r"^\d{10}$", code="invalid_national_code")], error_messages={"invalid_national_code" : "لطفا کدملی معتبر وارد کنید"})
 
     city = models.CharField(choices=CITY_CHOICES,
-                            verbose_name="شهر", blank=True, null=True)
+                            verbose_name="شهر", blank=True, null=True, max_length=50)
     province = models.CharField(
-        choices=PROVINCE_CHOICES, verbose_name="استان", blank=True, null=True)
+        choices=PROVINCE_CHOICES, verbose_name="استان", blank=True, null=True, max_length=50)
 
     wallet = models.PositiveIntegerField(
         blank=True, null=True, default=0, verbose_name="کیف پول")
@@ -189,6 +189,8 @@ class CostumUser(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return f"{self.get_fullname()}-{self.phone}"
+
+
 
 class Address(models.Model):
     user = models.ForeignKey(CostumUser, verbose_name="ادرس ها",
@@ -271,7 +273,7 @@ class Address(models.Model):
     )
 
     name = models.CharField(max_length=20, verbose_name="نام ادرس")
-    province = models.CharField(choices=PROVINCE_CHOICES, verbose_name="استان")
+    province = models.CharField(choices=PROVINCE_CHOICES, verbose_name="استان", max_length=50)
     city = models.CharField(choices=CITY_CHOICES,
                             max_length=20, verbose_name="شهر")
     reciever = models.CharField(max_length=100, verbose_name="تحویل گیرنده")

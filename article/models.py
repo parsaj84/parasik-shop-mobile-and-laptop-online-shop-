@@ -75,7 +75,7 @@ class Post(models.Model):
         CostumUser, related_name="posts", verbose_name="نویسنده", on_delete=models.CASCADE)
 
     status = models.CharField(choices=Status.choices,
-                              default=Status.draft, verbose_name="وضعیت")
+                              default=Status.draft, verbose_name="وضعیت", max_length=10)
 
     def get_absolute_url(self):
         return reverse("blog:post_detail", kwargs={"post_id" : self.pk, "post_slug" : self.slug})
@@ -95,13 +95,13 @@ class Post(models.Model):
 class Paragraph(models.Model):
     post = models.ForeignKey(to=Post, verbose_name="پست", help_text="این سایت از مارک دون پشتیبانی میکند",
                              on_delete=models.CASCADE, related_name="paragraphs")
-    title = models.CharField(verbose_name="عنوان")
+    title = models.CharField(verbose_name="عنوان", max_length=100)
     text = models.TextField(verbose_name="متن", max_length=400)
 
     image = models.ImageField(verbose_name="تصویر(الزامی نیست)",
                               upload_to="posts/paraghraph_images/", blank=True, null=True)
     image_title = models.CharField(
-        verbose_name="برای سئو عکس بهتر است وارد شود", blank=True, null=True)
+        verbose_name="برای سئو عکس بهتر است وارد شود", blank=True, null=True, max_length=100)
 
     class Meta:
         verbose_name = "پراگراف"
@@ -136,7 +136,7 @@ class Comment(models.Model):
         verbose_name="اخرین بروزرسانی", auto_now=True)
 
     status = models.CharField(choices=Status.choices,
-                              default=Status.draft, verbose_name="وضعیت")
+                              default=Status.draft, verbose_name="وضعیت", max_length=100)
 
     def __str__(self):
         return f"{self.post.title}-{self.title}"
@@ -153,7 +153,7 @@ class PostFileManager(models.Model):
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="files", verbose_name="پست")
     title = models.CharField(verbose_name="عنوان", blank=True,
-                             null=True, help_text="برای سئو بهتر است وارد شود")
+                             null=True, help_text="برای سئو بهتر است وارد شود", max_length=500)
     file = models.FileField(verbose_name="فایل(فیلم،عکس و ...)",
                             blank=True, null=True, upload_to="post_files/files/%Y/%m/%d/")
     image = models.ImageField(verbose_name="عکس", blank=True,

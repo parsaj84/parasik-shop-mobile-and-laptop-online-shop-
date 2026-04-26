@@ -19,7 +19,6 @@ class NotificationInline(admin.TabularInline):
     extra = 0
 
 class CostumUserAdmin(UserAdmin):
-    
     model = CostumUser
     list_filter = [("birthday", JDateFieldListFilter),]
     fieldsets = (("اطلاعات اصلی", {"fields": ["phone", "email", "password"]}),

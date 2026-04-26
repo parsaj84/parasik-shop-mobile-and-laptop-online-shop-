@@ -33,7 +33,7 @@ class AmazingOfferMain(models.Model):
 class Slider(models.Model):
     products = models.ManyToManyField(
         "Product", related_name="sliders", verbose_name="محصولات", blank=True, null=True)
-    name = models.CharField(verbose_name="نام")
+    name = models.CharField(verbose_name="نام", max_length=50)
     image = models.ImageField(upload_to="slider/", verbose_name="تصویر")
     link = models.URLField(verbose_name="url مربوط به اسلاید",
                            help_text="درصورت وارد کردن این فیلد دیگر از فیلد محصولات استفاده نخواهد شد!", blank=True, null=True)
@@ -72,7 +72,7 @@ class Category(models.Model):
         ("BR", "بر اساس برند"),
         ("CL", "بر اساس رنگ"),
     )
-    cat_base = models.CharField(choices=CATBASE, blank=True, null=True)
+    cat_base = models.CharField(choices=CATBASE, blank=True, null=True, max_length=50)
     name = models.CharField(max_length=20, verbose_name="نام دسته بندی")
     slug = models.SlugField(verbose_name="اسلاگ")
 
@@ -241,7 +241,7 @@ class Comment(models.Model):
 
     user = models.ForeignKey(CostumUser, verbose_name="کاربر ارسال کننده",
                              on_delete=models.CASCADE, related_name="user_comments")
-    status = models.CharField(choices=Status.choices, default=Status.DRAFT)
+    status = models.CharField(choices=Status.choices, default=Status.DRAFT, max_length=3)
 
     users_oponion = models.ManyToManyField(
         CostumUser, related_name='comments', verbose_name="نظرات کاربران", blank=True, null=True, through=UserOponionComment)

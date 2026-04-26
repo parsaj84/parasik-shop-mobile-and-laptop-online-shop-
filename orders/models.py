@@ -54,15 +54,15 @@ class Order(models.Model):
         ("DELIVERY", "تحویل به پست"),
     )
 
-    status = models.CharField(choices=ORDER_STATUS, blank=True, null=True)
+    status = models.CharField(choices=ORDER_STATUS, blank=True, null=True, max_length=100)
 
     send_price = models.PositiveBigIntegerField(
         verbose_name="هزینه ارسال", blank=True, null=True)
 
     post_type = models.CharField(
-        choices=POST_CHOICES, default="MN", verbose_name="نوع پست")
+        choices=POST_CHOICES, default="MN", verbose_name="نوع پست",max_length=100)
     total_price = models.PositiveBigIntegerField(
-        blank=True, null=True, verbose_name="قیمت کل سفارش")
+        blank=True, null=True, verbose_name="قیمت کل سفارش", max_length=100)
 
     tracking_id = models.CharField(verbose_name= "شماره پیگیری" ,blank=True, null=True, max_length=8, unique=True, error_messages={"unique" : "مقدار شماره پیگیری باید یکتا باشد"})
 
@@ -174,7 +174,7 @@ class OffCode(models.Model):
     users = models.ManyToManyField(
         CostumUser, related_name="off_codes", verbose_name="کاربران")
     code = models.CharField(unique=True, error_messages={
-                            "unique": "این کد تخفیف قیلا ثبت شده است"}, verbose_name="کد تخفیف")
+                            "unique": "این کد تخفیف قیلا ثبت شده است"}, verbose_name="کد تخفیف", max_length=30)
     min_price = models.PositiveBigIntegerField(verbose_name="کف خرید")
     OFF_TYPE = (
         ("FRSE", "ارسال رایگان"),
@@ -182,7 +182,7 @@ class OffCode(models.Model):
     )
 
     off_type = models.CharField(
-        choices=OFF_TYPE, default="FRSE", verbose_name="نوع تخفیف")
+        choices=OFF_TYPE, default="FRSE", verbose_name="نوع تخفیف", max_length=100) 
     price_decreament = models.PositiveBigIntegerField(
         verbose_name="کاهش قیمت", help_text="فقط در صورتی تعیین شود که نوع کو کاهش قیمت است.")
 
@@ -197,7 +197,7 @@ class OffCode(models.Model):
 class Notfication(models.Model):
     user = models.ForeignKey(CostumUser, related_name="notifications",
                              on_delete=models.CASCADE, verbose_name="کاربر")
-    title = models.CharField(max_length=50, verbose_name="عنوان")
+    title = models.CharField(max_length=50, verbose_name="عنوان",)
     text = models.TextField(max_length=300, verbose_name="متن پیام")
     date_created = jmodels.jDateTimeField(auto_now_add=True)
 
@@ -212,7 +212,7 @@ class Notfication(models.Model):
         ("OTH", "متفرقه")
     )
 
-    type = models.CharField(choices=NOTIFICATION_TYPE, verbose_name="نوع پیام")
+    type = models.CharField(choices=NOTIFICATION_TYPE, verbose_name="نوع پیام", max_length=100)
 
     def __str__(self):
         return self.title

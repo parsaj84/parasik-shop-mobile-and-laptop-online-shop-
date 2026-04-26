@@ -27,6 +27,9 @@ The project focuses on simplicity, clean structure, high performance, and easy c
 - **HTML5 / CSS3**
 - **tailwind css**
 
+
+
+
 ##  Future Improvements
 - **developing mobile app with react native and django rest framework**
 
